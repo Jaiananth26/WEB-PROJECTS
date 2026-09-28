@@ -27,10 +27,13 @@ jobs:
         with:
           node-version: 22
 
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
       - name: Build all project apps
         shell: bash
         run: |
-          set -e
+          set -euo pipefail
           mkdir -p site
           cat > site/index.html <<'EOF'
           <!doctype html>
