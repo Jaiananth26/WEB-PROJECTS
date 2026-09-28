@@ -1,12 +1,9 @@
-name: Deploy to GitHub Pages
+name: Deploy Web Interface Projects
 
 on:
   push:
     branches:
       - main
-    paths:
-      - 'unit - 2 Project - 1/unit-2-pro-1/**'
-      - '.github/workflows/deploy-pages.yml'
   workflow_dispatch:
 
 permissions:
@@ -29,21 +26,63 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: 22
-          cache: npm
-          cache-dependency-path: 'unit - 2 Project - 1/unit-2-pro-1/package-lock.json'
 
-      - name: Install dependencies
-        working-directory: 'unit - 2 Project - 1/unit-2-pro-1'
-        run: npm ci
+      - name: Build all project apps
+        shell: bash
+        run: |
+          set -e
+          mkdir -p site
+          cat > site/index.html <<'EOF'
+          <!doctype html>
+          <html lang="en">
+            <head>
+              <meta charset="UTF-8" />
+              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+              <title>Web Interface Projects</title>
+              <style>
+                body { font-family: Arial, sans-serif; margin: 40px; background: #111827; color: #f9fafb; }
+                .container { max-width: 900px; margin: 0 auto; }
+                .grid { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); }
+                a { display: block; padding: 18px 20px; background: #1f2937; border: 1px solid #374151; border-radius: 12px; color: #fff; text-decoration: none; font-weight: 600; }
+                a:hover { background: #374151; }
+              </style>
+            </head>
+            <body>
+              <div class="container">
+                <h1>Web Interface Projects</h1>
+                <div class="grid">
+                  <a href="./unit-2-project-1/">Unit 2 Project 1</a>
+                  <a href="./unit-2-project-2/">Unit 2 Project 2</a>
+                  <a href="./unit-3-project-2/">Unit 3 Project 2</a>
+                  <a href="./unit-3-project-1/">Unit 3 Project 1</a>
+                  <a href="./unit-4-project-1/">Unit 4 Project 1</a>
+                </div>
+              </div>
+            </body>
+          </html>
+          EOF
 
-      - name: Build site
-        working-directory: 'unit - 2 Project - 1/unit-2-pro-1'
-        run: npm run build
+          build_project() {
+            local project_path="$1"
+            local out_dir="$2"
+            echo "Building $project_path"
+            cd "$GITHUB_WORKSPACE/$project_path"
+            npm ci
+            npm run build
+            rm -rf "$GITHUB_WORKSPACE/site/$out_dir"
+            cp -R dist "$GITHUB_WORKSPACE/site/$out_dir"
+          }
+
+          build_project "unit - 2 Project - 1/unit-2-pro-1" "unit-2-project-1"
+          build_project "unit - 2 project - 2/unit-2-pro-2" "unit-2-project-2"
+          build_project "unit - 3 project - 2/unit-3-pro-2" "unit-3-project-2"
+          build_project "unit - 3 project -1/unit-3-pro-1" "unit-3-project-1"
+          build_project "unit - 4 project - 1/unit-4-pro-1" "unit-4-project-1"
 
       - name: Upload Pages artifact
         uses: actions/upload-pages-artifact@v3
         with:
-          path: 'unit - 2 Project - 1/unit-2-pro-1/dist'
+          path: site
 
   deploy:
     environment:
