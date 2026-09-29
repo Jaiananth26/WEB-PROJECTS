@@ -1,5 +1,5 @@
 import { BrowserRouter, Navigate, Route, Routes } from 'react-router-dom'
-import FormValidation, { SuccessMessage } from './formvalidation'
+import FormValidation from './formvalidation'
 import './App.css'
 
 function App() {
@@ -7,7 +7,6 @@ function App() {
     <BrowserRouter>
       <Routes>
         <Route path="/" element={<FormValidation />} />
-        <Route path="/welcome" element={<SuccessMessage />} />
         <Route path="*" element={<Navigate to="/" replace />} />
       </Routes>
     </BrowserRouter>
