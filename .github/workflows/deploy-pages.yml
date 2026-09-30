@@ -111,7 +111,10 @@ jobs:
           build_project \
             "unit - 5 project - 1/unit-5 pro-1" \
             "unit-5-project-1"
-
+          
+          build_project \
+            "unit - 5 project - 2/StudyLedger-Student-Academic-Management-System/unit-5 pro-2" \
+            "unit-5-project-2"
           # ==========================================
           # Main Homepage
           # ==========================================
@@ -276,6 +279,13 @@ jobs:
                 <div class="card">
                   <h2>Unit 5 - Project 1</h2>
                   <a href="./unit-5-project-1/">
+                    Open Project
+                  </a>
+                </div>
+
+                <div class="card">
+                  <h2>Unit 5 - Project 2</h2>
+                  <a href="./unit-5-project-2/">
                     Open Project
                   </a>
                 </div>
