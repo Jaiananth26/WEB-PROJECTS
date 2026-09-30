@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Student Profile Card</title>
+        <!DOCTYPE html>
+<html>
+<head>
+    <title>Student Profile Card</title>
+
+    <style>
+        body{
+            text-align:center;
+            font-family:Arial;
+        }
+
+        input{
+            margin:5px;
+            padding:5px;
+        }
+
+        button{
+            padding:5px 10px;
+        }
+
+        .card{
+            border:1px solid black;
+            width:220px;
+            margin:20px auto;
+            padding:10px;
+            display:none;
+        }
+    </style>
+</head>
+
+<body>
+
+<h2>Student Profile</h2>
+
+<input type="text" id="name" placeholder="Student Name"><br>
+
+<input type="text" id="roll" placeholder="Roll Number"><br>
+
+<input type="number" id="marks" placeholder="Marks"><br><br>
+
+<button onclick="showProfile()">Display Profile</button>
+
+<div class="card" id="card">
+    <h3>Profile Card</h3>
+
+    <p>Name : <span id="sname"></span></p>
+
+    <p>Roll No : <span id="sroll"></span></p>
+
+    <p>Marks : <span id="smarks"></span></p>
+
+    <p>Grade : <span id="sgrade"></span></p>
+</div>
+
+<script>
+
+function showProfile(){
+
+    let name = document.getElementById("name").value;
+    let roll = document.getElementById("roll").value;
+    let marks = document.getElementById("marks").value;
+
+    let grade;
+
+    if(marks >= 80){
+        grade = "A";
+    }
+    else if(marks >= 70){
+        grade = "B";
+    }
+    else if(marks >= 60){
+        grade = "C";
+    }
+    else{
+        grade = "F";
+    }
+
+    document.getElementById("sname").textContent = name;
+    document.getElementById("sroll").textContent = roll;
+    document.getElementById("smarks").textContent = marks;
+    document.getElementById("sgrade").textContent = grade;
+
+    document.getElementById("card").style.display = "block";
+}
+
+</script>
+
+</body>
+</html>
+        

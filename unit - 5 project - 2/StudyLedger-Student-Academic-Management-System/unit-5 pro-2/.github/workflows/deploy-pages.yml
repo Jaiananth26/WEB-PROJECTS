@@ -1,0 +1,312 @@
+name: Deploy Web Interface Projects
+
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Check out repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Build all project apps
+        shell: bash
+        run: |
+          set -euo pipefail
+
+          mkdir -p site
+
+          # ==========================================
+          # Unit 1 - Static HTML Projects
+          # ==========================================
+
+          mkdir -p "site/unit-1-project-1"
+          cp "unit - 1 project - 1.html" \
+             "site/unit-1-project-1/index.html"
+
+          mkdir -p "site/unit-1-project-2"
+          cp "unit - 1 project - 2.html" \
+             "site/unit-1-project-2/index.html"
+
+          # ==========================================
+          # Function to build Vite projects
+          # ==========================================
+
+          build_project() {
+            local project_path="$1"
+            local out_dir="$2"
+
+            echo "========================================="
+            echo "Building: $project_path"
+            echo "========================================="
+
+            cd "$GITHUB_WORKSPACE/$project_path"
+
+            npm ci
+            npm run build
+
+            rm -rf "$GITHUB_WORKSPACE/site/$out_dir"
+            mkdir -p "$GITHUB_WORKSPACE/site/$out_dir"
+
+            cp -R dist/. "$GITHUB_WORKSPACE/site/$out_dir/"
+          }
+
+          # ==========================================
+          # Unit 2
+          # ==========================================
+
+          build_project \
+            "unit - 2 Project - 1/unit-2-pro-1" \
+            "unit-2-project-1"
+
+          build_project \
+            "unit - 2 project - 2/unit-2-pro-2" \
+            "unit-2-project-2"
+
+          # ==========================================
+          # Unit 3
+          # ==========================================
+
+          build_project \
+            "unit - 3 project - 2/unit-3-pro-2" \
+            "unit-3-project-2"
+
+          build_project \
+            "unit - 3 project -1/unit-3-pro-1" \
+            "unit-3-project-1"
+
+          # ==========================================
+          # Unit 4
+          # ==========================================
+
+          build_project \
+            "unit - 4 project - 1/unit-4-pro-1" \
+            "unit-4-project-1"
+          build_project \
+            "unit - 4 project - 2/unit-4-pro-2" \
+            "unit-4-project-2"
+
+          build_project \
+            "unit - 5 project - 1/unit-5 pro-1" \
+            "unit-5-project-1"
+
+          # ==========================================
+          # Main Homepage
+          # ==========================================
+
+          cat > "$GITHUB_WORKSPACE/site/index.html" <<'EOF'
+          <!DOCTYPE html>
+          <html lang="en">
+
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+            <title>Web Interface Projects</title>
+
+            <style>
+              * {
+                box-sizing: border-box;
+              }
+
+              body {
+                margin: 0;
+                font-family: Arial, sans-serif;
+                background: #111827;
+                color: #f9fafb;
+              }
+
+              header {
+                text-align: center;
+                padding: 50px 20px 30px;
+              }
+
+              header h1 {
+                margin: 0;
+                font-size: 42px;
+              }
+
+              header p {
+                margin-top: 12px;
+                color: #cbd5e1;
+                font-size: 18px;
+              }
+
+              .container {
+                max-width: 1000px;
+                margin: 0 auto;
+                padding: 20px;
+              }
+
+              .grid {
+                display: grid;
+                grid-template-columns:
+                  repeat(auto-fit, minmax(280px, 1fr));
+                gap: 20px;
+              }
+
+              .card {
+                background: #1f2937;
+                border: 1px solid #374151;
+                border-radius: 14px;
+                padding: 25px;
+                transition: transform 0.2s ease;
+              }
+
+              .card:hover {
+                transform: translateY(-3px);
+              }
+
+              .card h2 {
+                margin: 0 0 18px;
+                font-size: 22px;
+              }
+
+              .card a {
+                display: block;
+                padding: 12px 16px;
+                background: #2563eb;
+                color: white;
+                text-align: center;
+                text-decoration: none;
+                border-radius: 8px;
+                font-weight: bold;
+              }
+
+              .card a:hover {
+                background: #1d4ed8;
+              }
+
+              footer {
+                text-align: center;
+                padding: 40px 20px;
+                color: #9ca3af;
+              }
+            </style>
+          </head>
+
+          <body>
+
+            <header>
+              <h1>Web Interface Projects</h1>
+              <p>My Web Development Projects</p>
+            </header>
+
+            <main class="container">
+
+              <div class="grid">
+
+                <div class="card">
+                  <h2>Unit 1 - Project 1</h2>
+                  <a href="./unit-1-project-1/">
+                    Open Project
+                  </a>
+                </div>
+
+                <div class="card">
+                  <h2>Unit 1 - Project 2</h2>
+                  <a href="./unit-1-project-2/">
+                    Open Project
+                  </a>
+                </div>
+
+                <div class="card">
+                  <h2>Unit 2 - Project 1</h2>
+                  <a href="./unit-2-project-1/">
+                    Open Project
+                  </a>
+                </div>
+
+                <div class="card">
+                  <h2>Unit 2 - Project 2</h2>
+                  <a href="./unit-2-project-2/">
+                    Open Project
+                  </a>
+                </div>
+
+                <div class="card">
+                  <h2>Unit 3 - Project 1</h2>
+                  <a href="./unit-3-project-1/">
+                    Open Project
+                  </a>
+                </div>
+
+                <div class="card">
+                  <h2>Unit 3 - Project 2</h2>
+                  <a href="./unit-3-project-2/">
+                    Open Project
+                  </a>
+                </div>
+
+                <div class="card">
+                  <h2>Unit 4 - Project 1</h2>
+                  <a href="./unit-4-project-1/">
+                    Open Project
+                  </a>
+                </div>
+                <div class="card">
+                  <h2>Unit 4 - Project 2</h2>
+                  <a href="./unit-4-project-2/">
+                    Open Project
+                  </a>
+                </div>
+
+                <div class="card">
+                  <h2>Unit 5 - Project 1</h2>
+                  <a href="./unit-5-project-1/">
+                    Open Project
+                  </a>
+                </div>
+
+              </div>
+
+            </main>
+
+            <footer>
+              Web Interface Projects
+            </footer>
+
+          </body>
+          </html>
+          EOF
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    runs-on: ubuntu-latest
+
+    needs: build
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Counter App</title>
+</head>
+    <style>
+        body{
+            text-align:center;
+            font-family:Arial, sans-serif;
+            margin-top:30px;
+        }
+
+        button{
+            padding:8px 20px;
+            margin:10px;
+            border-radius:5px;
+        }
+
+        p{
+            font-size:24px;
+            font-weight:bold;
+        }
+        .increment-button {
+            background-color: green;
+            color: white;
+        }
+        .decrement-button {
+            background-color: red;
+            color: white;
+        }
+        .reset-button {
+            background-color: blue;
+            color: white;
+        }
+        counter {
+            font-size: 24px;
+            font-weight: bold;
+        }
+        div[data-testid="counter-app"] {
+            display: inline-block;
+            padding: 20px;
+            border: 1px solid #817e7e;
+            border-radius: 5px;
+            background-color: #c1bfbf;
+        }
+    </style>
+</head>
+<body>
+    <div data-testid="counter-app">
+        <h1>Counter App</h1>
+        <p id="counter">0</p>
+        <button class="increment-button" onclick="increment()">+1</button>
+        <button class="reset-button" onclick="reset()">Reset</button>
+        <button class="decrement-button" onclick="decrement()">-1</button>
+    </div>
+   
+
+    <script>
+        let count = 0;
+
+        function increment() {
+            count++;
+            document.getElementById("counter").innerText = count;
+        }
+
+        function decrement() {
+            count--;
+            document.getElementById("counter").innerText = count;
+        }
+
+        function reset() {
+            count = 0;
+            document.getElementById("counter").innerText = count;
+        }
+    </script>
+
+</body>
+</html>
